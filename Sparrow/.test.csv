@@ -1,0 +1,1 @@
+Kmer,Rev,Index,Filter,Fwd No GC Clamp,Fwd No 3x Dinucleotide Repeats,Fwd No 4x Hompolymer Repeats,Fwd Not Self-Complementary,Fwd GC 40-60%,Fwd kmer GC Content,Fwd Score,Rev No GC Clamp,Rev No 3x Dinucleotide Repeats,Rev No 4x Hompolymer Repeats,Rev Not Self-Complementary,Rev GC 40-60%,Rev kmer GC Content,Rev Score
