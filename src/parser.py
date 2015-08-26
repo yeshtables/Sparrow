@@ -6,7 +6,7 @@ import sys
 import re
 import csv
 import operator
-
+from collections import defaultdict
 
 #Constants
 ERR_NONE = 0
@@ -33,6 +33,9 @@ if (__name__ == '__main__'):
 	parser.add_argument('-l', '--productlength', dest='productlength', required=True, 
 						help='Desired Product Length') 
 	
+	parser.add_argument('-c', '--conservation', dest='consFileName', required=True, 
+						help='Conservation reference file') 
+	
 	parser.add_argument('-v', '--verbose', dest='verbose', default=False, action='store_true',
 						help='Set verbose output.')
 	
@@ -50,7 +53,26 @@ x = []
 row_index=0
 f= open(args.outFileName, 'wt')
 
-print("Forward Kmer, Fwd Index, Reverse Kmer, Rev Index, Cumulative Score", file=f)
+#Conservation
+consFile = open(args.consFileName, 'rt')
+
+        #Write header line
+        #outFile.write('Kmer,Rev,Score')
+
+#Create Dictionary
+a = defaultdict(float)
+
+for line in consFile:
+        tok = line.strip().split(',')
+        if not line.find("#"):
+            continue
+        if len(tok)<2:
+            continue
+        a[tok[0]] = float(tok[1])
+
+
+
+print("Forward Kmer, Fwd Index, Reverse Kmer, Rev Index, Cumulative Score, Fwd Conservation, Rev Conservation", file=f)
 with open(args.inFileName, 'rt') as csvfile:
 	samplereader = csv.reader(csvfile, delimiter =',', quotechar=' ')
 	for row in samplereader:
@@ -70,11 +92,18 @@ for row in x:
                 if (x[second_row][13] == "T"): score=score+1
                 if (x[second_row][14] == "T"): score=score+1
                 if (x[second_row][15] == "T"): score=score+1
+                #if (re.search('(.{7}).*-.*\\1'.format(x[row_index][0], x[second_row][1])) == None): score=score+100
                 if (x[row_index][8] == "T" and x[second_row][15] == "T" and (float(x[row_index][9])-float(x[second_row][16])==0)): score = score+4
                 if row_index !=0:
-                        print(x[row_index][0],x[row_index][2],x[second_row][1],x[second_row][2],score, sep=", ", file=f)
+                        print(x[row_index][0],x[row_index][2],x[second_row][1],x[second_row][2],score, a[x[row_index][0]], a[x[second_row][0]], sep=", ", file=f)
                         #print(x[row_index][0],",",x[row_index][2],",",x[second_row][1],",",x[second_row][2],",",score, file=f)
                 row_index=(row_index+1)
+
+
+
+
+
+#print (a['TCTAACGCAACATAATAAACT'])
 
 csvfile.close()
 f.close()
