@@ -1,5 +1,7 @@
 # Sparrow
 
+![test](http://www.prism.gatech.edu/~yasvanth3/Venn.png)
+
 Usage:
 
 Before Running Sparrow make sure to run the conservation.py tool found in the ./src/ folder. It's usage is as follows:
